@@ -1,52 +1,31 @@
 from sqlalchemy.orm import Session
-
+from sqlalchemy.dialects import sqlite
 import models, schemas
 
+def print_query(db, query):
+    dialect = db.bind.dialect
+    print(query.statement.compile(dialect=dialect))
 
-# def get_user(db: Session, user_id: int):
-#     return db.query(models.User).filter(models.User.id == user_id).first()
+def get_notes(db: Session, skip: int = 0, limit: int = 100):
+    query = db.query(models.Note).offset(skip).limit(limit).all()
+    # print(query.statement.compile(dialect=dialect))
+    return query
 
-
-# def get_user_by_email(db: Session, email: str):
-#     return db.query(models.User).filter(models.User.email == email).first()
-
-
-# def get_users(db: Session, skip: int = 0, limit: int = 100):
-#     return db.query(models.User).offset(skip).limit(limit).all()
-
-
-# def create_user(db: Session, user: schemas.UserCreate):
-#     fake_hashed_password = user.password + "notreallyhashed"
-#     db_user = models.User(email=user.email, hashed_password=fake_hashed_password)
-#     db.add(db_user)
-#     db.commit()
-#     db.refresh(db_user)
-#     return db_user
-
-
-def get_items(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Item).offset(skip).limit(limit).all()
-
-
-# def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
-#     db_item = models.Item(**item.dict(), owner_id=user_id)
-#     db.add(db_item)
-#     db.commit()
-#     db.refresh(db_item)
-#     return db_item
-
-def create_item(db: Session, item: schemas.ItemCreate):
-    db_item = models.Item(**item.dict())
-    db.add(db_item)
+def create_note(db: Session, note: schemas.NoteCreate):
+    dialect = db.bind.dialect
+    db_note = models.Note(**note.dict())
+    db.add(db_note)
+    # print_query(db, db.commit())
     db.commit()
-    db.refresh(db_item)
-    return db_item
+    db.refresh(db_note)
+    print(str(db_note))
+    return db_note
 
-def update_item(db: Session, item_id, item):
-    matching_item = db.query(models.Item).filter_by(id=item_id).update(item)
+def update_note(db: Session, note_id, note):
+    matching_note = db.query(models.Note).filter_by(id=note_id).update(note)
     db.commit()
-    return matching_item
+    return matching_note
 
-def delete_item(db: Session, item_id):
-    db.query(models.Item).filter_by(id=item_id).delete()
+def delete_note(db: Session, note_id):
+    db.query(models.Note).filter_by(id=note_id).delete()
     db.commit()

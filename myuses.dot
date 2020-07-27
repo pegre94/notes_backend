@@ -1,0 +1,21 @@
+digraph G {
+    graph [rankdir=TB];
+    subgraph cluster_G {
+
+        graph [style="filled,rounded",fillcolor="#80808018", label=""];
+        crud [label="crud", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        models [label="models", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="1"];
+        crud__create_note [label="create_note", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        crud__delete_note [label="delete_note", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        crud__get_notes [label="get_notes", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        crud__update_note [label="update_note", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="0"];
+        models__Note [label="Note", style="filled", fillcolor="#ffffffb2", fontcolor="#000000", group="1"];
+    }
+        crud -> crud__delete_note [style="dashed", color="#838b8b"];
+        crud -> crud__create_note [style="dashed", color="#838b8b"];
+        crud -> crud__get_notes [style="dashed", color="#838b8b"];
+        crud -> crud__update_note [style="dashed", color="#838b8b"];
+        models -> models__Note [style="dashed", color="#838b8b"];
+        crud -> models [style="solid", color="#000000"];
+        crud__create_note -> models__Note [style="solid", color="#000000"];
+    }
